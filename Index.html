@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f4f7fc;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        overflow: hidden; /* Ensure no scrolling */
+      }
+      .container {
+        text-align: center;
+        background-color: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        width: 400px;
+        height: auto;
+        max-height: 90vh; /* Ensure the modal fits within the screen */
+        overflow: hidden; /* Disable any overflow */
+      }
+      h3 {
+        color: #333;
+        margin-bottom: 10px;
+        font-weight: bold;
+      }
+      .checkbox-group {
+        text-align: left;
+        margin-bottom: 20px;
+      }
+      label {
+        display: block;
+        margin: 5px 0;
+        font-size: 16px;
+        color: #333;
+      }
+      input[type="checkbox"] {
+        margin-right: 10px;
+      }
+      button {
+        background-color: #007BFF;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+        transition: background-color 0.3s ease;
+      }
+      button:hover {
+        background-color: #0056b3;
+      }
+
+      /* Loader Styles */
+      .spinner {
+        display: none;
+        margin: 20px auto;
+        border: 5px solid #f3f3f3; /* Light background */
+        border-top: 5px solid #007bff; /* Blue color */
+        border-radius: 50%;
+        width: 30px;
+        height: 30px;
+        animation: spin 1s linear infinite;
+      }
+
+      @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h3>Select File Types</h3>
+      <form id="fetchForm">
+        <div class="checkbox-group">
+          <label>
+            <input type="checkbox" id="spreadsheet" name="fileTypes" value="Spreadsheet"> Spreadsheet
+          </label>
+          <label>
+            <input type="checkbox" id="document" name="fileTypes" value="Document"> Document
+          </label>
+          <label>
+            <input type="checkbox" id="presentation" name="fileTypes" value="Presentation"> Presentations
+          </label>
+          <label>
+            <input type="checkbox" id="pdf" name="fileTypes" value="PDF"> PDF
+          </label>
+          <label>
+            <input type="checkbox" id="form" name="fileTypes" value="Form"> Forms
+          </label>
+          <label>
+            <input type="checkbox" id="image" name="fileTypes" value="Image"> Image
+          </label>
+          <label>
+            <input type="checkbox" id="video" name="fileTypes" value="Video"> Videos
+          </label>
+        </div>
+        <button type="button" onclick="fetchFiles()">Fetch</button>
+      </form>
+
+      <!-- Loader (Hidden Initially) -->
+      <div id="loader" class="spinner"></div>
+    </div>
+
+    <script>
+      function fetchFiles() {
+        var form = document.getElementById('fetchForm');
+        var selectedTypes = [];
+
+        // Show the loader
+        document.getElementById('loader').style.display = 'block';
+
+        // Collect selected file types
+        for (var i = 0; i < form.elements['fileTypes'].length; i++) {
+          if (form.elements['fileTypes'][i].checked) {
+            selectedTypes.push(form.elements['fileTypes'][i].value);
+          }
+        }
+
+        google.script.run.withSuccessHandler(function() {
+          // Hide the loader once the files are fetched
+          document.getElementById('loader').style.display = 'none';
+        }).getAdvancedFilesFromDrive(selectedTypes);
+
+        google.script.host.close();
+      }
+    </script>
+  </body>
+</html>
