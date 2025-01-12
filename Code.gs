@@ -10,7 +10,7 @@ function showAboutDialog() {
   const htmlContent = `
     <div style="font-family: Arial, sans-serif; text-align: center;">
       <h3>FileFetch</h3>
-      <p>Created by: A Chowdhury</p>
+      <p>Created by: Anindya Chowdhury</p>
       <p>Version: 1.0</p>
       <p>Release Date: Jan 2025</p>
     </div>
